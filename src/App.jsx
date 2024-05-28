@@ -1,7 +1,11 @@
 import { useState } from "react";
 
 const App = () => {
-  return <>TEST</>;
+  return (
+    <>
+      <h1 className="text-3xl font-bold underline">TEST</h1>
+    </>
+  );
 };
 
 export default App;
