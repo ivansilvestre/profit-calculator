@@ -1,0 +1,10 @@
+{
+  "CALCULATE": "Calcular",
+  "INTEREST_CALCULATOR": "Calculadora de juros",
+  "VALID_INITIAL_VALUE": "Insira um valor válido",
+  "VALID_TIME": "Insira apenas números inteiros",
+  "DAYS": "Dias",
+  "INITIAL_INVESTMENT": "Investimento inicial",
+  "TAX_RATE": "Taxa de imposto",
+  "INTEREST_RATE": "Taxa de juros"
+}
