@@ -1,5 +1,5 @@
 export const numberValidation = (param) =>
   param ? param.trim() !== "" && !/^\d*\.?\d*$/.test(param) : false;
 
-export const daysNumberValidation = (param) =>
+export const monthsNumberValidation = (param) =>
   param ? param.trim() !== "" && !/^\d*$/.test(param) : false;

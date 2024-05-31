@@ -6,7 +6,7 @@ import { dark, light } from "../theme";
 import Navbar from "./components/Navbar";
 import { calculateInterestRate } from "./utils/calculations";
 import {
-  daysNumberValidation,
+  monthsNumberValidation,
   numberValidation,
 } from "./utils/inputValidations";
 
@@ -15,7 +15,7 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [initialValue, setInitialValue] = useState("");
   const [interestRate, setInterestRate] = useState("");
-  const [days, setDays] = useState("");
+  const [months, setMonths] = useState("");
   const [taxRate, setTaxRate] = useState("");
   const [hasError, setHasError] = useState(false);
   const theme = darkMode ? dark : light;
@@ -23,19 +23,23 @@ const App = () => {
   // grossProfits, lucros brutos
   // percentagem num certo tempo (4% em 6, 12 meses, etc.)
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //console.log({ initialValue, days, taxRate, interestRate });
-    //console.log(calculateInterestRate(initialValue, days, interestRate));
-    //calculateInterestRate(initialValue, days, interestRate);
-    setInitialValue("");
-    setDays("");
-    setTaxRate("");
-    setInterestRate("");
-  };
-
   const handleThemeMode = () => {
     setDarkMode(!darkMode);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    calculateInterestRate(initialValue, months, interestRate);
+
+    clearForm();
+  };
+
+  const clearForm = () => {
+    setInitialValue("");
+    setMonths("");
+    setTaxRate("");
+    setInterestRate("");
   };
 
   return (
@@ -48,8 +52,9 @@ const App = () => {
         />
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={6} sm={12}>
               <TextField
+                sx={{ mt: "1rem" }}
                 name="initial-value"
                 onChange={(event) => setInitialValue(event.target.value)}
                 value={initialValue}
@@ -66,8 +71,9 @@ const App = () => {
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={6} sm={12}>
               <TextField
+                sx={{ mt: "1rem" }}
                 name="interest-rate"
                 onChange={(event) => setInterestRate(event.target.value)}
                 value={interestRate}
@@ -84,19 +90,23 @@ const App = () => {
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={6} sm={12}>
               <TextField
-                name="days"
-                onChange={(event) => setDays(event.target.value)}
-                value={days}
+                sx={{ mt: "1rem", with: "100%" }}
+                name="months"
+                onChange={(event) => setMonths(event.target.value)}
+                value={months}
                 required
-                label={t("DAYS")}
-                error={daysNumberValidation(days)}
-                helperText={daysNumberValidation(days) ? t("VALID_TIME") : ""}
+                label={t("MONTHS")}
+                error={monthsNumberValidation(months)}
+                helperText={
+                  monthsNumberValidation(months) ? t("VALID_TIME") : ""
+                }
               />
             </Grid>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={6} sm={12}>
               <TextField
+                sx={{ mt: "1rem" }}
                 name="tax-rate"
                 onChange={(event) => setTaxRate(event.target.value)}
                 value={taxRate}
@@ -118,7 +128,7 @@ const App = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             disabled={
-              daysNumberValidation(days) ||
+              monthsNumberValidation(months) ||
               numberValidation(initialValue) ||
               numberValidation(taxRate) ||
               numberValidation(interestRate)

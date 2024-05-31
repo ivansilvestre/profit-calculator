@@ -4,9 +4,6 @@ import { COLOR } from "./src/constants";
 export const light = createTheme({
   palette: {
     mode: "light",
-    primary: {
-      main: COLOR.LIGHT, // main color
-    },
   },
   typography: {
     fontFamily: "Roboto, sans-serif", // main font family
@@ -58,9 +55,6 @@ export const light = createTheme({
 export const dark = createTheme({
   palette: {
     mode: "dark",
-    primary: {
-      main: COLOR.DARK, // main color
-    },
   },
   typography: {
     fontFamily: "Roboto, sans-serif", // main font family
@@ -103,6 +97,15 @@ export const dark = createTheme({
         root: {
           backgroundColor: COLOR.DARK, // navbar background color
           color: COLOR.LIGHT, // navbar text color
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "&.Mui-focused ": {
+            borderColor: COLOR.WHITE, // outline color on focus
+          },
         },
       },
     },

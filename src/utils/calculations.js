@@ -1,6 +1,8 @@
-export const calculateInterestRate = (initialValue, days, interestRate) => {
-  const decimalInterestRate = Number(interestRate) / 100; // 4% / 12 months = 0,3333%
-  let total = Number(initialValue) * (1 + decimalInterestRate / 12);
+export const calculateInterestRate = (initialValue, months, interestRate) => {
+  const anualInterestRate = Number(interestRate) / 100;
+  const mensalInterestRate = anualInterestRate / 12;
 
-  return total.toFixed(2);
+  return (
+    Number(initialValue) * Math.pow(1 + mensalInterestRate, Number(months))
+  );
 };
