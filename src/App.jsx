@@ -1,8 +1,10 @@
-import { Box, Button, Grid, InputAdornment, TextField } from "@mui/material";
+import { Box, Button, Grid, InputAdornment } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { dark, light } from "../theme";
+import Modal from "./components/Dialog";
+import Input from "./components/Input";
 import Navbar from "./components/Navbar";
 import { calculateInterestRate } from "./utils/calculations";
 import {
@@ -13,26 +15,15 @@ import {
 const App = () => {
   const [t] = useTranslation();
   const [darkMode, setDarkMode] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
   const [initialValue, setInitialValue] = useState("");
   const [interestRate, setInterestRate] = useState("");
   const [months, setMonths] = useState("");
   const [taxRate, setTaxRate] = useState("");
-  const [hasError, setHasError] = useState(false);
   const theme = darkMode ? dark : light;
-  // netProfits, lucros líquidos
-  // grossProfits, lucros brutos
-  // percentagem num certo tempo (4% em 6, 12 meses, etc.)
 
   const handleThemeMode = () => {
     setDarkMode(!darkMode);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    calculateInterestRate(initialValue, months, interestRate);
-
-    clearForm();
   };
 
   const clearForm = () => {
@@ -40,6 +31,14 @@ const App = () => {
     setMonths("");
     setTaxRate("");
     setInterestRate("");
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    calculateInterestRate(initialValue, months, interestRate);
+    clearForm();
+    setOpenDialog(true);
   };
 
   return (
@@ -52,76 +51,57 @@ const App = () => {
         />
         <Box component="form" onSubmit={handleSubmit}>
           <Grid container>
-            <Grid item xs={6} sm={12}>
-              <TextField
-                sx={{ mt: "1rem" }}
-                name="initial-value"
-                onChange={(event) => setInitialValue(event.target.value)}
-                value={initialValue}
-                required
-                label={t("INITIAL_INVESTMENT")}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">€</InputAdornment>
-                  ),
-                }}
-                error={numberValidation(initialValue)}
-                helperText={
-                  numberValidation(initialValue) ? t("VALID_INITIAL_VALUE") : ""
-                }
-              />
-            </Grid>
-            <Grid item xs={6} sm={12}>
-              <TextField
-                sx={{ mt: "1rem" }}
-                name="interest-rate"
-                onChange={(event) => setInterestRate(event.target.value)}
-                value={interestRate}
-                required
-                label={t("INTEREST_RATE")}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">%</InputAdornment>
-                  ),
-                }}
-                error={numberValidation(interestRate)}
-                helperText={
-                  numberValidation(interestRate) ? t("VALID_INITIAL_VALUE") : ""
-                }
-              />
-            </Grid>
-            <Grid item xs={6} sm={12}>
-              <TextField
-                sx={{ mt: "1rem", with: "100%" }}
-                name="months"
-                onChange={(event) => setMonths(event.target.value)}
-                value={months}
-                required
-                label={t("MONTHS")}
-                error={monthsNumberValidation(months)}
-                helperText={
-                  monthsNumberValidation(months) ? t("VALID_TIME") : ""
-                }
-              />
-            </Grid>
-            <Grid item xs={6} sm={12}>
-              <TextField
-                sx={{ mt: "1rem" }}
-                name="tax-rate"
-                onChange={(event) => setTaxRate(event.target.value)}
-                value={taxRate}
-                label={t("TAX_RATE")}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">%</InputAdornment>
-                  ),
-                }}
-                error={numberValidation(taxRate)}
-                helperText={
-                  numberValidation(taxRate) ? t("VALID_INITIAL_VALUE") : ""
-                }
-              />
-            </Grid>
+            <Input
+              sx={{ mt: "1rem" }}
+              name="initial-value"
+              onChange={(event) => setInitialValue(event.target.value)}
+              value={initialValue}
+              label={t("INITIAL_INVESTMENT")}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">€</InputAdornment>,
+              }}
+              error={numberValidation(initialValue)}
+              helperText={
+                numberValidation(initialValue) ? t("VALID_INITIAL_VALUE") : ""
+              }
+            />
+            <Input
+              sx={{ mt: "1rem" }}
+              name="interest-rate"
+              onChange={(event) => setInterestRate(event.target.value)}
+              value={interestRate}
+              label={t("INTEREST_RATE")}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+              }}
+              error={numberValidation(interestRate)}
+              helperText={
+                numberValidation(interestRate) ? t("VALID_INITIAL_VALUE") : ""
+              }
+            />
+            <Input
+              sx={{ mt: "1rem", with: "100%" }}
+              name="months"
+              onChange={(event) => setMonths(event.target.value)}
+              value={months}
+              label={t("MONTHS")}
+              error={monthsNumberValidation(months)}
+              helperText={monthsNumberValidation(months) ? t("VALID_TIME") : ""}
+            />
+            <Input
+              sx={{ mt: "1rem" }}
+              name="tax-rate"
+              onChange={(event) => setTaxRate(event.target.value)}
+              value={taxRate}
+              label={t("TAX_RATE")}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+              }}
+              error={numberValidation(taxRate)}
+              helperText={
+                numberValidation(taxRate) ? t("VALID_INITIAL_VALUE") : ""
+              }
+            />
           </Grid>
           <Button
             type="submit"
@@ -137,6 +117,7 @@ const App = () => {
             {t("CALCULATE")}
           </Button>
         </Box>
+        <Modal openDialog={openDialog} onClick={() => setOpenDialog(false)} />
       </>
     </ThemeProvider>
   );
